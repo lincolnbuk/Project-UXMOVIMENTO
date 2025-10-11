@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "951872961260",
+    "project_id": "uxmovimento",
+    "storage_bucket": "uxmovimento.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951872961260:android:5afb8ed234f46df2bb03c9",
+        "android_client_info": {
+          "package_name": "com.uxmovimento"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9j1Y3a1L8N2ANE8pMdDLPJZ6NhFNo1EE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
