@@ -35,6 +35,9 @@ local.properties
 !debug.keystore
 .kotlin/
 
+# Do not commit keystore properties with secrets
+keystore.properties
+
 # node.js
 #
 node_modules/

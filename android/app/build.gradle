@@ -94,10 +94,17 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('release-key.keystore')
-            storePassword 'Universoparalelo@07'
-            keyAlias 'uxmovimento'
-            keyPassword 'Universoparalelo@07'
+            // Load signing config from keystore.properties (keystore not checked into VCS)
+            def keystorePropertiesFile = rootProject.file("keystore.properties")
+            def keystoreProperties = new Properties()
+            if (keystorePropertiesFile.exists()) {
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+            }
+
+            storeFile file(keystoreProperties['storeFile'] ?: 'release-key.keystore')
+            storePassword keystoreProperties['storePassword'] ?: ''
+            keyAlias keystoreProperties['keyAlias'] ?: ''
+            keyPassword keystoreProperties['keyPassword'] ?: ''
         }
     }
     buildTypes {
@@ -108,6 +115,23 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+    // Temporarily use Java 17 compile options for compatibility with included modules.
+    // Once all modules are migrated to Java 21, this can be updated.
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    // Configure Java toolchain to 17 for now
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
         }
     }
 }

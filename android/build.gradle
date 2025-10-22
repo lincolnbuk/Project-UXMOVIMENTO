@@ -12,11 +12,31 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle")
-        classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        // Use Android Gradle Plugin compatible with workspace dependencies
+        // Alinhado para AGP 8.9.2 para tentar resolver incompatibilidades de variantes
+        classpath("com.android.tools.build:gradle:8.9.2")
+        classpath("com.facebook.react:react-native-gradle-plugin:0.4.3")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath 'com.google.gms:google-services:4.3.15'
     }
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+// Force Java toolchain and Kotlin JVM target for all Android subprojects.
+// This helps avoid "Inconsistent JVM-target compatibility" between Java and Kotlin
+// compile tasks when some modules default to a lower JVM target.
+subprojects {
+    // Configure Kotlin compile tasks to use jvmTarget = 17 to match Java toolchains in some
+    // included builds/modules. This is a temporary compatibility fix to allow the
+    // release build to proceed; we can later migrate all modules to JVM 21.
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
+
+    // Note: do not use JavaCompile.options.release with Android projects (AGP requires
+    // sourceCompatibility/targetCompatibility or Java toolchains). The app module's
+    // compileOptions will be set directly in its build.gradle.
+}
