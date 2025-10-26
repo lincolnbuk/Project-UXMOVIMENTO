@@ -1,4 +1,4 @@
-README - UxMovimento (Android build & Play Store quick guide)
+# README - UxMovimento (Android build & Play Store quick guide)
 
 Este README descreve os passos mínimos para gerar um AAB assinado pronto para upload ao Google Play, usando a configuração atual do projeto.
 
