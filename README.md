@@ -1,3 +1,78 @@
+## UxMovimento — Build e Play Store
+
+Este README curto descreve como gerar um AAB assinado e os passos rápidos para testar em dispositivo e enviar ao Play Console.
+
+Local do projeto
+
+- Raiz do projeto: `c:\Users\lincoln\Desktop\UxMovimento`
+- Android: `android/`
+
+Keystore (já criado localmente para este repositório)
+
+- Arquivo: `android/release-key.keystore`
+- Credenciais: `android/keystore.properties` (não versionado por padrão — cuidado ao commitar)
+
+Gerar AAB assinado (build já testado neste repositório)
+
+1. Abra um terminal (PowerShell) na pasta do projeto e rode:
+
+```powershell
+cd 'c:\Users\lincoln\Desktop\UxMovimento\android'
+.\gradlew.bat clean bundleRelease --no-daemon --info
+```
+
+2. Artefato gerado (exemplo):
+
+- `android/app/build/outputs/bundle/release/app-release.aab` (ou `intermediary-bundle.aab`)
+
+Transformar AAB em APKs instaláveis (opcional — usa bundletool)
+
+1. Baixe o bundletool.jar: https://github.com/google/bundletool/releases
+2. Crie APKS a partir do AAB:
+
+```powershell
+# ajuste senhas conforme seu keystore
+java -jar bundletool.jar build-apks --bundle=app-release.aab --output=app-release.apks --ks=../release-key.keystore --ks-pass=pass:<STORE_PASS> --ks-key-alias=upload --key-pass=pass:<KEY_PASS>
+
+# instala no dispositivo conectado (USB)
+java -jar bundletool.jar install-apks --apks=app-release.apks
+```
+
+Testar localmente (debug)
+
+```powershell
+# instala o app em modo debug no dispositivo/emulador
+npx react-native run-android
+```
+
+Gerar e instalar APK release (alternativa direta)
+
+```powershell
+cd android
+.\gradlew.bat assembleRelease
+# depois instale (dispositivo conectado)
+.\gradlew.bat installRelease
+```
+
+Notas importantes
+
+- O `android/app/build.gradle` atualmente contém um fallback temporário para Java 17 (compileOptions + toolchain + kotlin jvmTarget = 17) para compatibilidade com módulos nativos. O build release foi verificado e gerou um AAB assinado.
+- Próximo passo (recomendado): migrar tudo para Java 21 e remover o fallback; isso exige ajustar/atualizar módulos nativos ou aplicar patches temporários.
+
+Se quiser que eu faça a migração completa para Java 21 (remover fallback e corrigir quaisquer módulos), responda "Continuar migração" — eu faço a inspeção e aplico patches/PRs necessários.
+
+Local de saída do build
+
+- `android/app/build/outputs/bundle/release`
+
+Suporte
+
+- Se quiser que eu gere o README completo para Play Store (texto para o console, notas de release, changelog), aviso e eu adiciono.
+
+---
+
+README criado automaticamente pelo assistente para preparar o AAB e publicar no Play Store.
+
 # UxMovimento
 
 ![React Native Logo](https://reactnative.dev/img/header_logo.svg)
