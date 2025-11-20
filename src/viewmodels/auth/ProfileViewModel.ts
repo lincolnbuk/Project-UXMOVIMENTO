@@ -32,7 +32,14 @@ export function useProfileViewModel(uid: string) {
     setLoading(true);
     setError(null);
     try {
-      await firestore().collection('users').doc(uid).set(data);
+      // Garante que nenhum campo seja undefined antes de salvar no Firestore
+      const cleanedData: any = {};
+      Object.keys(data).forEach(key => {
+        const value = (data as any)[key];
+        // Substitui undefined por string vazia para evitar "Unsupported field value: undefined"
+        cleanedData[key] = value ?? '';
+      });
+      await firestore().collection('users').doc(uid).set(cleanedData);
       setProfile(data);
     } catch (e: any) {
       setError('Erro ao salvar perfil: ' + (e?.message ?? ''));

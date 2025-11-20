@@ -45,8 +45,11 @@ export function useAuthViewModel() {
         goals: '',
       });
     } catch (e) {
-      const err = e as { message?: string };
-      setError(err.message ?? 'Erro ao fazer login');
+      const err = e as { message?: string; code?: string };
+      console.error('Login error:', err);
+      setError(
+        `${err.code ?? 'auth/error'}: ${err.message ?? 'Erro ao fazer login'}`,
+      );
     } finally {
       setLoading(false);
     }
@@ -72,8 +75,13 @@ export function useAuthViewModel() {
         goals: '',
       });
     } catch (e) {
-      const err = e as { message?: string };
-      setError(err.message ?? 'Erro ao registrar usuário');
+      const err = e as { message?: string; code?: string };
+      console.error('Register error:', err);
+      setError(
+        `${err.code ?? 'auth/error'}: ${
+          err.message ?? 'Erro ao registrar usuário'
+        }`,
+      );
     } finally {
       setLoading(false);
     }
@@ -92,8 +100,13 @@ export function useAuthViewModel() {
       const firebaseAuth = getFirebaseAuth();
       await firebaseAuth.sendPasswordResetEmail(email);
     } catch (e) {
-      const err = e as { message?: string };
-      setError(err.message ?? 'Erro ao enviar e-mail de recuperação');
+      const err = e as { message?: string; code?: string };
+      console.error('RecoverPassword error:', err);
+      setError(
+        `${err.code ?? 'auth/error'}: ${
+          err.message ?? 'Erro ao enviar e-mail de recuperação'
+        }`,
+      );
     } finally {
       setLoading(false);
     }

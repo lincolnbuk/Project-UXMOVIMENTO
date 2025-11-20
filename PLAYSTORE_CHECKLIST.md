@@ -1,4 +1,44 @@
-Play Store Upload Checklist - UxMovimento
+# Play Store Checklist — UxMovimento
+
+Use esta checklist antes de subir o AAB ao Play Console.
+
+1. Versão e assinatura
+
+   - [ ] Atualizar `versionCode` e `versionName` em `android/app/build.gradle` (em `defaultConfig`).
+   - [ ] Verificar que o AAB está assinado com o keystore correto (`android/release-key.keystore`) e que `android/keystore.properties` aponta para o keystore e contém as senhas corretas. (As credenciais foram criadas localmente no repositório.)
+
+2. Gerar AAB assinado
+
+   - [ ] Rodar `cd android && .\gradlew.bat clean bundleRelease` e confirmar que `android/app/build/outputs/bundle/release/app-release.aab` existe.
+
+3. Testes em dispositivo
+
+   - [ ] Testar versão release em um ou dois dispositivos reais (usar `bundletool` para gerar installable apks a partir do aab ou gerar `assembleRelease` APKs). Verificar permissões, fluxos de login e notificações.
+
+4. Lint e crash reports
+
+   - [ ] Verificar logs e corrigir warnings críticos do Android Lint.
+   - [ ] Rodar smoke tests manuais nas telas-chave (login, perfil, chat, mapas/rota se houver).
+
+5. Conteúdo do Play Console
+
+   - [ ] Preparar ícones, screenshots (telefone/tablet), descrição curta e longa.
+   - [ ] Preencher política de privacidade (se aplicável) e marcar permissões sensíveis.
+   - [ ] Ativar assinatura em app signing by Google Play (se desejar) — subir chave de upload (upload key) separada se usar App Signing by Google Play.
+
+6. Distribuição
+
+   - [ ] Criar release no Play Console e carregar o AAB.
+   - [ ] Preencher notas de versão (changelog) e configurar track (internal/test/production).
+
+7. Pós-upload
+   - [ ] Executar testes internal/test track antes de promover para produção.
+   - [ ] Monitorar relatórios de crash e ANRs e corrigir problemas críticos antes do rollout total.
+
+Observações técnicas
+
+- O projeto atualmente usa um fallback temporário para Java 17 no `android/app/build.gradle` para garantir compatibilidade com módulos nativos. Se preferir migrar para Java 21 agora, informe que eu faço a migração completa e valido o build novamente.
+  Play Store Upload Checklist - UxMovimento
 
 Use este checklist antes de enviar a AAB ao Google Play Console.
 
