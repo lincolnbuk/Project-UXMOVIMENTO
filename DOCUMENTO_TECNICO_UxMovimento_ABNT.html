@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Documento Técnico - UxMovimento</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 3cm 2cm 2cm 3cm;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.5;
+        }
+
+        .capa,
+        .folha-rosto {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .capa h1 {
+            font-size: 20pt;
+            margin-bottom: 40px;
+        }
+
+        .capa p {
+            font-size: 12pt;
+            margin: 6px 0;
+        }
+
+        .resumo,
+        .secao {
+            text-align: justify;
+            margin-top: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 14pt;
+            margin-top: 20px;
+        }
+
+        h3 {
+            font-size: 12pt;
+            margin-top: 14px;
+        }
+
+        .sumario {
+            margin-top: 8px;
+        }
+
+        .anexo {
+            font-size: 11pt;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 1.5cm;
+            left: 3cm;
+            right: 2cm;
+            text-align: right;
+            font-size: 10pt;
+        }
+
+        .small {
+            font-size: 10pt;
+        }
+
+        .monospace {
+            font-family: monospace;
+            font-size: 11pt;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="capa">
+        <div>
+            <h1>UxMovimento</h1>
+            <p><strong>Documento Técnico</strong></p>
+            <p>Aplicativo Móvel para Corredores — Autenticação, Perfil, Chat, Gamificação e Pareamento</p>
+            <p class="small">Autor: lincolnbuk</p>
+            <p class="small">Local: São Paulo, SP</p>
+            <p class="small">Data: 20 de novembro de 2025</p>
+        </div>
+    </section>
+
+    <section class="folha-rosto">
+        <div>
+            <h2>Folha de Rosto</h2>
+            <p class="small">UxMovimento — Aplicativo Móvel para Corredores</p>
+            <p class="small">Autor: lincolnbuk</p>
+            <p class="small">Repositório: Project-UXMOVIMENTO (branch: java21-migration)</p>
+            <p class="small">Data: 20 de novembro de 2025</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Resumo</h2>
+        <p class="resumo">O presente documento descreve o projeto UxMovimento, um aplicativo móvel desenvolvido em React
+            Native voltado para corredores. O sistema oferece autenticação por email/senha via Firebase Authentication,
+            gerenciamento de perfil persistido em Cloud Firestore, funcionalidades de chat em tempo real, mecanismos de
+            gamificação para engajamento e um módulo de pareamento de treinos. O documento apresenta a arquitetura,
+            tecnologias, o estado atual do projeto, evidências de build, pendências técnicas, recomendações de segurança
+            e o checklist para publicação na Google Play Store.</p>
+    </section>
+
+    <section>
+        <h2>Sumário</h2>
+        <ol class="sumario">
+            <li>Introdução</li>
+            <li>Objetivos</li>
+            <li>Tecnologias e Versões</li>
+            <li>Arquitetura do Sistema</li>
+            <li>Implementação por Módulo</li>
+            <li>Configuração do Ambiente e Build</li>
+            <li>Estado Atual e Evidências</li>
+            <li>Pendências e Riscos</li>
+            <li>Testes e QA Recomendados</li>
+            <li>Segurança e Regras do Firestore</li>
+            <li>Checklist para Play Store</li>
+            <li>Roadmap e Recomendações</li>
+            <li>Referências</li>
+            <li>Anexos</li>
+        </ol>
+    </section>
+
+    <section class="secao">
+        <h3>1 Introdução</h3>
+        <p>Este documento técnico apresenta o desenvolvimento do aplicativo UxMovimento. Tem como objetivo compilar a
+            análise técnica, decisões de arquitetura, status de implementação e pendências para que a equipe técnica e
+            stakeholders tenham visão consolidada do projeto.</p>
+
+        <h3>2 Objetivos</h3>
+        <p>O objetivo principal do UxMovimento é prover uma aplicação móvel que permita a corredores gerenciar seu
+            perfil, conectar-se com outros corredores, participar de desafios (gamificação) e organizar treinos em
+            pares. Objetivos específicos incluem a criação de builds assinados para publicação, integração com back-end
+            (Firebase) e estabilidade do fluxo de desenvolvimento local.</p>
+
+        <h3>3 Tecnologias e Versões</h3>
+        <ul>
+            <li>React Native (~0.80.x)</li>
+            <li>TypeScript</li>
+            <li>Firebase: @react-native-firebase/app, auth, firestore</li>
+            <li>Gradle Wrapper: ~8.14.1</li>
+            <li>Android Gradle Plugin: 8.9.2</li>
+            <li>JDK: fallback temporário para Java 17; migração planejada para Java 21 (branch: java21-migration)</li>
+            <li>Metro bundler: v0.82.x</li>
+        </ul>
+
+        <h3>4 Arquitetura do Sistema</h3>
+        <p>O aplicativo segue uma arquitetura simples de camada de apresentação (views), lógica de negócio (viewmodels)
+            e modelos de dados (models). O armazenamento backend é Cloud Firestore; autenticação via Firebase
+            Authentication. Estrutura de pastas no repositório inclui `src/models`, `src/viewmodels` e `src/views`.
+            Builds nativos residem nas pastas `android/` e `ios/`.</p>
+
+        <h3>5 Implementação por Módulo</h3>
+        <h4>5.1 Autenticação</h4>
+        <p>Local: `src/viewmodels/auth/AuthViewModel.ts`.
+            Implementa login, registro e logout com `@react-native-firebase/auth`. Foram adicionados logs mais
+            detalhados (erro com `err.code` e `err.message`) para auxiliar o diagnóstico de problemas como
+            `auth/invalid-credential`.</p>
+
+        <h4>5.2 Perfil</h4>
+        <p>Local: `src/views/auth/ProfileView.tsx` e `src/viewmodels/auth/ProfileViewModel.ts`.
+            O perfil é armazenado em Firestore na coleção `users` por documento `uid`. O campo email é obtido a partir
+            do usuário autenticado e é somente leitura na interface. A função de salvar perfil substitui `undefined` por
+            string vazia para evitar erro do Firestore <em>Unsupported field value: undefined</em>. Adicionado feedback
+            visual de sucesso ao salvar.</p>
+
+        <h4>5.3 Chat</h4>
+        <p>Existem implementações iniciais em `src/viewmodels/chat` e `src/views/chat`. É necessário validar a
+            sincronização em tempo real entre múltiplos clientes e realizar testes de consistência.</p>
+
+        <h4>5.4 Gamificação</h4>
+        <p>Implementações localizadas em `src/viewmodels/gamification`. Funcionalidades básicas de pontos e desafios
+            existem, mas regras e persistência devem ser validadas com testes funcionais.</p>
+
+        <h4>5.5 Pareamento (Match)</h4>
+        <p>Módulo de pareamento presente em `src/viewmodels/match`. Requer validação das regras de pareamento e testes
+            de cenário para confirmar qualidade dos matches gerados.</p>
+
+        <h3>6 Configuração do Ambiente e Build</h3>
+        <p>Pré-requisitos: Node.js, npm, Android SDK, JDK 17 (fallback) e JDK 21 quando migrar. Instruções básicas de
+            build:</p>
+        <pre class="monospace">npm install
+npx react-native start --reset-cache
+npx react-native run-android
+cd android
+./gradlew clean bundleRelease</pre>
+
+        <h3>7 Estado Atual e Evidências</h3>
+        <p>Branch de trabalho: `java21-migration`.</p>
+        <p>Artefatos gerados e caminhos:</p>
+        <ul>
+            <li>Keystore: `android/release-key.keystore` (alias: upload)</li>
+            <li>Keystore properties: `android/keystore.properties`</li>
+            <li>AAB assinado: `android/app/build/outputs/bundle/release/app-release.aab`</li>
+            <li>`google-services.json`: `android/app/google-services.json` (package: `com.uxmovimento`)</li>
+        </ul>
+
+        <h3>8 Pendências e Riscos</h3>
+        <ul>
+            <li>Diagnóstico do erro `auth/invalid-credential` em runtime (logs ADB necessários).</li>
+            <li>Migração completa para Java 21 — requer atualização e teste de módulos nativos.</li>
+            <li>Revisão de Firestore Security Rules e endurecimento de permissões.</li>
+            <li>Validações de formulário (campo `name` obrigatório, tamanhos e limites).</li>
+            <li>Testes de chat/gamificação/match em cenários multiusuário.</li>
+        </ul>
+
+        <h3>9 Testes e QA Recomendados</h3>
+        <ol>
+            <li>Fluxo completo de autenticação (registro, login, logout).</li>
+            <li>Salvar/recuperar perfil e validação da persistência em Firestore.</li>
+            <li>Teste de mensagens em chat entre dois usuários.</li>
+            <li>Testes E2E com Detox ou Appium para os fluxos críticos.</li>
+        </ol>
+
+        <h3>10 Segurança e Regras do Firestore</h3>
+        <p>Recomendação de regras mínimas (copiar para o console do Firebase):</p>
+        <pre class="monospace">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}</pre>
+
+        <h3>11 Checklist para Play Store</h3>
+        <ul>
+            <li>Gerar AAB assinado e validar assinatura.</li>
+            <li>Adicionar SHA-1/SHA-256 do keystore no Firebase Console (se usar OAuth).</li>
+            <li>Validar `google-services.json` atualizado.</li>
+            <li>Preparar ícones, screenshots e textos para publicação.</li>
+        </ul>
+
+        <h3>12 Roadmap e Recomendações</h3>
+        <p>Curto prazo: diagnosticar `auth/invalid-credential`, validar Firestore Rules, adicionar validações em
+            formulário. Médio prazo: completar migração Java 21 e testes. Longo prazo: CI/CD, monitoramento e automação
+            de deploy.</p>
+
+        <h3>13 Referências</h3>
+        <ul>
+            <li>React Native — https://reactnative.dev</li>
+            <li>Firebase Documentation — https://firebase.google.com/docs</li>
+            <li>Android Gradle Plugin — https://developer.android.com/studio/releases/gradle-plugin</li>
+        </ul>
+
+        <h3>Anexos</h3>
+        <p>Itens e comandos úteis:</p>
+        <pre class="monospace"># Executar app
+npx react-native run-android
+
+# Gerar AAB (na pasta android)
+./gradlew clean bundleRelease
+
+# Capturar logs ADB
+adb logcat -c
+adb logcat > "$env:USERPROFILE\\Desktop\\adb-log.txt"</pre>
+
+        <p class="small">Documento gerado automaticamente com base no estado do repositório disponível em 20/11/2025.
+        </p>
+    </section>
+
+    <footer>
+        UxMovimento — Documento Técnico • 20/11/2025
+    </footer>
+</body>
+
+</html>

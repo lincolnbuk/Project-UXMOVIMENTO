@@ -1,4 +1,6 @@
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const exclusionList = require('metro-config/src/defaults/exclusionList');
+const path = require('path');
 
 /**
  * Metro configuration
@@ -6,6 +8,19 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {};
+// Construção do resolver com patterns robustos
+// Usar padrões simples com barra para evitar criação de character classes problemáticas
+const cxxIgnorePatterns = exclusionList([
+  /\/\.cxx\//,
+  /node_modules\/react-native-screens\/android\/\.cxx\//,
+]);
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+// Mescla a configuração padrão com nossas regras.
+const baseConfig = getDefaultConfig(__dirname);
+module.exports = mergeConfig(baseConfig, {
+  resolver: {
+    // Compatibilidade: define ambas as chaves
+    blacklistRE: cxxIgnorePatterns,
+    blockList: cxxIgnorePatterns,
+  },
+});

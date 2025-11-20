@@ -196,8 +196,9 @@
         "você",
         "xcodeproj"
     ],
-    "java.jdt.ls.java.home": "C:/Program Files/Microsoft/jdk-17.0.16.8-hotspot/",
+    "java.jdt.ls.java.home": "C:\\Program Files\\Microsoft\\jdk-17.0.17.10-hotspot",
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "interactive",
-    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable"
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable",
+    "DockerRun.DisableDockerrc": true
 }
